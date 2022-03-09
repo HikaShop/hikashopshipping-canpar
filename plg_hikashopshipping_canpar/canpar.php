@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-class plgHikashopshippingCANPAR extends hikashopShippingPlugin {
+class plgHikashopshippingCanpar extends hikashopShippingPlugin {
 	var $canpar_methods = array(
 		array('key' => '1', 'code'=>'1', 'name' => 'Ground', 'countries' => 'CANADA'),
 		array('key' => '2', 'code'=>'2','name' => 'USA', 'countries' => 'USA'),
@@ -143,11 +143,11 @@ class plgHikashopshippingCANPAR extends hikashopShippingPlugin {
 						$selected_method = $canpar_method['key'];
 					}
 				}
-				$local_usable_rates[$i]->shipping_name = $name;
+				$local_usable_rates[$i]->shipping_name .= ' ' . $name;
 				if(!empty($selected_method))
 					$local_usable_rates[$i]->shipping_id .= '-' . $selected_method;
 
-				if ($method['deliveryDate'] != 'www.canpar.ca') {
+				if (!empty($method['deliveryDate']) && $method['deliveryDate'] != 'www.canpar.ca') {
 					if (is_numeric($method['deliveryDate'])) {
 						$timestamp = strtotime($method['deliveryDate']);
 						$time =  parent::displayDelaySECtoDAY($timestamp - strtotime('now'), 2);
@@ -329,7 +329,7 @@ function checkAllBox(id, type){
 		if (empty($usableWarehouses)) {
 			return false;
 		}
-		$method_available = '';
+		$method_available = array();
 
 		foreach ($usableWarehouses as $k => $warehouse) {
 			if (!empty($warehouse -> methods)) {
